@@ -3,44 +3,56 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { auth } from "../firebase";
-import { useLoginMutation } from "../redux/api/userAPI";
+import { getUser, useLoginMutation } from "../redux/api/userAPI";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { MessageResponse } from "../types/api-types";
+import { userExist, userNotExist } from "../redux/reducer/userReducer";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [gender, setGender] = useState("");
   const [date, setDate] = useState("");
 
-  const [login] = useLoginMutation()
+  const [login] = useLoginMutation();
 
   const loginHandler = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
-      const res = await login({
-        name:user.displayName!,
-        email:user.email!,
-        photo:user.photoURL!,
+      console.log({
+        name: user.displayName!,
+        email: user.email!,
+        photo: user.photoURL!,
         gender,
-        role:"user",
+        role: "user",
         dob: date,
-        _id:user.uid,
+        _id: user.uid,
       });
 
-      if("data" in res){
+      const res = await login({
+        name: user.displayName!,
+        email: user.email!,
+        photo: user.photoURL!,
+        gender,
+        role: "user",
+        dob: date,
+        _id: user.uid,
+      });
+
+      if ("data" in res) {
         toast.success(res.data.message);
-      } else{
+        const data = await getUser(user.uid);
+        dispatch(userExist(data?.user!));
+      } else {
         const error = res.error as FetchBaseQueryError;
         const message = (error.data as MessageResponse).message;
         toast.error(message);
+        dispatch(userNotExist());
       }
-
-
-      console.log(user);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error("Sign in Fail");
+      toast.error("Sign In Fail");
     }
   };
 
@@ -48,15 +60,7 @@ const Login = () => {
     <div className="login">
       <main>
         <h1 className="heading">Login</h1>
-        {/* <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            placeholder="Enter yor name"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div> */}
+
         <div>
           <label>Gender</label>
           <select value={gender} onChange={(e) => setGender(e.target.value)}>
@@ -65,8 +69,9 @@ const Login = () => {
             <option value="female">Female</option>
           </select>
         </div>
+
         <div>
-          <label>Date of Birth</label>
+          <label>Date of birth</label>
           <input
             type="date"
             value={date}

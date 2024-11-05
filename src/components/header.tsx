@@ -1,4 +1,6 @@
+import { signOut } from "firebase/auth";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FaSearch,
   FaShoppingCart,
@@ -7,11 +9,8 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { User } from "../types/types";
-import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import toast from "react-hot-toast";
-import CartItem from "./cart-item";
+import { User } from "../types/types";
 
 interface PropsType {
   user: User | null;

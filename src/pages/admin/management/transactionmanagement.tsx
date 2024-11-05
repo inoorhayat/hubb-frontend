@@ -42,6 +42,7 @@ const TransactionManagement = () => {
   const {
     shippingInfo: { address, city, state, country, pinCode },
     orderItems,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     user: { name },
     status,
     tax,
