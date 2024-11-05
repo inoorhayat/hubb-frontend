@@ -14,7 +14,7 @@ const PieCharts = () => {
 
   const order = data?.charts.orderFullfillment!;
   const categories = data?.charts.productCategories!;
-  const stock = data?.charts.stockAvailability!;
+  const stock = data?.charts.stockAvailablity!;
   const revenue = data?.charts.revenueDistribution!;
   const ageGroup = data?.charts.usersAgeGroup!;
   const adminCustomer = data?.charts.adminCustomer!;
