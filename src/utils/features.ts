@@ -54,9 +54,7 @@ export const getLastMonths = () => {
   };
 };
 
-export const transformImage = (url: string | undefined, width = 200) => {
-  if (!url) return ""; // or return a default image URL
+export const transformImage = (url: string, width = 200) => {
   const newUrl = url.replace("upload/", `upload/dpr_auto/w_${width}/`);
   return newUrl;
-
 };
