@@ -22,9 +22,9 @@ const Login = () => {
       const { user } = await signInWithPopup(auth, provider);
 
       console.log({
-        name: user.displayName!,
-        email: user.email!,
-        photo: user.photoURL!,
+        name: user.displayName || "Unknown Name", // Fallback to a default value if undefined
+        email: user.email || "Unknown Email",
+        photo: user.photoURL || "", // or some default image
         gender,
         role: "user",
         dob: date,
@@ -40,17 +40,23 @@ const Login = () => {
         dob: date,
         _id: user.uid,
       });
-
       if ("data" in res) {
-        toast.success(res.data.message);
+        toast.success(res.data!.message);
         const data = await getUser(user.uid);
-        dispatch(userExist(data?.user!));
+        if (data?.user) {
+          dispatch(userExist(data.user));
+        } else {
+          toast.error("User does not exist.");
+          dispatch(userNotExist());
+        }
       } else {
         const error = res.error as FetchBaseQueryError;
         const message = (error.data as MessageResponse).message;
         toast.error(message);
         dispatch(userNotExist());
       }
+      
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Sign In Fail");
     }
