@@ -1,0 +1,64 @@
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: radial-gradient(circle, #faf3f0, #ece2de);
+}
+
+.loader {
+  display: flex;
+  font-size: 3rem;
+  font-family: "Noto Naskh Arabic", serif; // This font closely resembles calligraphy styles
+  color: #8a4b54;
+  gap: 10px;
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+  animation: draw 1.5s ease-in-out forwards, glow 1.5s infinite alternate ease-in-out;
+  animation-delay: calc(var(--i) * 0.5s); /* Each letter animates in sequence */
+  position: relative;
+
+  &.letter1 {
+    --i: 1;
+  }
+  
+  &.letter2 {
+    --i: 2;
+  }
+}
+
+@keyframes draw {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 8px rgba(138, 75, 84, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(138, 75, 84, 0.8);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loader {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader {
+    font-size: 2rem;
+  }
+}
