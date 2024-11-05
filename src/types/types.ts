@@ -14,6 +14,7 @@ export interface User {
     name: string;
     price: number;
     stock: number;
+    photo: string;
     category: string;
     ratings: number;
     numOfReviews: number;
