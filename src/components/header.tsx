@@ -1,46 +1,75 @@
-const Loader = () => {
-  return (
-    <section className="loader">
-      <div></div>
-    </section>
-  );
-};
+import { Link } from "react-router-dom";
+import {
+  FaSearch,
+  FaShoppingBag,
+  FaSignInAlt,
+  FaUser,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import { useState } from "react";
+import { User } from "../types/types";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import toast from "react-hot-toast";
 
-export const LoaderLayout = () => {
-  return (
-    <section
-      style={{
-        height: "calc(100vh - 4rem)",
-      }}
-      className="loader"
-    >
-      <div></div>
-    </section>
-  );
-};
-
-export default Loader;
-
-interface SkeletonProps {
-  width?: string;
-  length?: number;
-  height?: string;
-  containerHeight?: string;
+interface PropsType {
+  user: User | null;
 }
 
-export const Skeleton = ({
-  width = "unset",
-  length = 3,
-  height = "30px",
-  containerHeight = "unset",
-}: SkeletonProps) => {
-  const skeletions = Array.from({ length }, (_, idx) => (
-    <div key={idx} className="skeleton-shape" style={{ height }}></div>
-  ));
+const Header = ({ user }: PropsType) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const logoutHandler = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Sign Out Successfully");
+      setIsOpen(false);
+    } catch (error) {
+      toast.error("Sign Out Fail");
+    }
+  };
 
   return (
-    <div className="skeleton-loader" style={{ width, height: containerHeight }}>
-      {skeletions}
-    </div>
+    <nav className="header">
+      <Link onClick={() => setIsOpen(false)} to={"/"}>
+        HOME
+      </Link>
+      <Link onClick={() => setIsOpen(false)} to={"/search"}>
+        <FaSearch />
+      </Link>
+      <Link onClick={() => setIsOpen(false)} to={"/cart"}>
+        <FaShoppingBag />
+      </Link>
+
+      {user?._id ? (
+        <>
+          <button onClick={() => setIsOpen((prev) => !prev)}>
+            <FaUser />
+          </button>
+          <dialog open={isOpen}>
+            <div>
+              {user.role === "admin" && (
+                <Link onClick={() => setIsOpen(false)} to="/admin/dashboard">
+                  Admin
+                </Link>
+              )}
+
+              <Link onClick={() => setIsOpen(false)} to="/orders">
+                Orders
+              </Link>
+              <button onClick={logoutHandler}>
+                <FaSignOutAlt />
+              </button>
+            </div>
+          </dialog>
+        </>
+      ) : (
+        <Link to={"/login"}>
+          <FaSignInAlt />
+        </Link>
+      )}
+    </nav>
   );
 };
+
+export default Header;
