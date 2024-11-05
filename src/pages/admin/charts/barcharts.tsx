@@ -14,6 +14,7 @@ const { last12Months, last6Months } = getLastMonths();
 const Barcharts = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, data, error, isError } = useBarQuery(user?._id!);
 
   const products = data?.charts.products || [];

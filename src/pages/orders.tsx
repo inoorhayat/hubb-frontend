@@ -49,6 +49,7 @@ const Orders = () => {
   const { user } = useSelector((state: RootState) => state.userReducer
   );
   
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
 
   const [rows, setRows] = useState<DataType[]>([]);

@@ -55,6 +55,7 @@ const App = () => {
         dispatch(userExist(data.user));
       } else dispatch(userNotExist());
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return loading ? (

@@ -51,6 +51,7 @@ const NewProduct = () => {
     formData.set("photo", photo);
     formData.set("category", category);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     const res = await newProduct({id:user?._id!, formData})
     responseToast(res, navigate, "/admin/product")
 

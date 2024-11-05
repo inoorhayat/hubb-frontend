@@ -49,6 +49,7 @@ const columns: Column<DataType>[] = [
 const Transaction = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, data, isError, error } = useAllOrdersQuery(user?._id!);
 
   const [rows, setRows] = useState<DataType[]>([]);

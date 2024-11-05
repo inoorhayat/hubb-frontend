@@ -20,6 +20,7 @@ const { last6Months } = getLastMonths();
 const Dashboard = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, data, isError } = useStatsQuery(user?._id!);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain

@@ -14,6 +14,7 @@ const Linecharts = () => {
 
   const { user } = useSelector((state: RootState) => state.userReducer);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, data, error, isError } = useLineQuery(user?._id!);
 
   const products = data?.charts.products || [];

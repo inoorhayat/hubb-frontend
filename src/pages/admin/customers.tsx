@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
@@ -93,6 +94,7 @@ const Customers = () => {
           ),
         }))
       );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const Table = TableHOC<DataType>(
