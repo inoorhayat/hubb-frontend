@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import TableHOC from "../components/admin/TableHOC";
 import { Skeleton } from "../components/loader";
@@ -15,7 +14,6 @@ type DataType = {
   quantity: number;
   discount: number;
   status: ReactElement;
-  action: ReactElement;
 };
 
 const column: Column<DataType>[] = [
@@ -39,17 +37,11 @@ const column: Column<DataType>[] = [
     Header: "Status",
     accessor: "status",
   },
-  {
-    Header: "Action",
-    accessor: "action",
-  },
 ];
 
 const Orders = () => {
-  const { user } = useSelector((state: RootState) => state.userReducer
-  );
-  
-  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+  const { user } = useSelector((state: RootState) => state.userReducer);
+
   const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
 
   const [rows, setRows] = useState<DataType[]>([]);
@@ -80,7 +72,6 @@ const Orders = () => {
               {i.status}
             </span>
           ),
-          action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>,
         }))
       );
   }, [data]);
@@ -92,10 +83,9 @@ const Orders = () => {
     "Orders",
     rows.length > 6
   )();
-
   return (
     <div className="container">
-      <h1>My Orders~</h1>
+      <h1>My Orders</h1>
       {isLoading ? <Skeleton length={20} /> : Table}
     </div>
   );

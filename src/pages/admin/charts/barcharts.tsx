@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { Skeleton } from "../../../components/loader";
 import { getLastMonths } from "../../../utils/features";
 
-
 const { last12Months, last6Months } = getLastMonths();
 
 const Barcharts = () => {

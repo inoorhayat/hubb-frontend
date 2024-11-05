@@ -10,8 +10,11 @@ import { Skeleton } from "../components/loader";
 import { CartItem } from "../types/types";
 import { addToCart } from "../redux/reducer/cartReducer";
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 const Search = () => {
+  const searchQuery = useSearchParams()[0];
+
   const {
     data: categoriesResponse,
     isLoading: loadingCategories,
@@ -21,8 +24,8 @@ const Search = () => {
 
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
-  const [maxPrice, setMaxPrice] = useState(9999);
-  const [category, setCategory] = useState("");
+  const [maxPrice, setMaxPrice] = useState(100000);
+  const [category, setCategory] = useState(searchQuery.get("category") || "");
   const [page, setPage] = useState(1);
 
   const {
@@ -38,12 +41,12 @@ const Search = () => {
     price: maxPrice,
   });
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const addToCartHandler = (cartItem:CartItem) => {
-    if(cartItem.stock < 1) return toast.error("Out of Stock!");
+  const addToCartHandler = (cartItem: CartItem) => {
+    if (cartItem.stock < 1) return toast.error("Out of Stock");
     dispatch(addToCart(cartItem));
-    toast.success("Item Added to Cart");
+    toast.success("Added to cart");
   };
 
   const isPrevPage = page > 1;
@@ -53,12 +56,10 @@ const Search = () => {
     const err = error as CustomError;
     toast.error(err.data.message);
   }
-
   if (productIsError) {
     const err = productError as CustomError;
     toast.error(err.data.message);
   }
-
   return (
     <div className="product-search-page">
       <aside>
@@ -73,11 +74,11 @@ const Search = () => {
         </div>
 
         <div>
-          <h4>Max Price: {maxPrice || ""} </h4>
+          <h4>Max Price: {maxPrice || ""}</h4>
           <input
             type="range"
             min={100}
-            max={9999}
+            max={100000}
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
           />
@@ -89,7 +90,7 @@ const Search = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="">All</option>
+            <option value="">ALL</option>
             {!loadingCategories &&
               categoriesResponse?.categories.map((i) => (
                 <option key={i} value={i}>
@@ -109,7 +110,7 @@ const Search = () => {
         />
 
         {productLoading ? (
-          <Skeleton length={20} />
+          <Skeleton length={10} />
         ) : (
           <div className="search-product-list">
             {searchedData?.products.map((i) => (

@@ -61,11 +61,11 @@ const Cart = () => {
       cancel();
       setIsValidCouponCode(false);
     };
-  }, [couponCode, dispatch]);
+  }, [couponCode]);
 
   useEffect(() => {
     dispatch(calculatePrice());
-  }, [cartItems, dispatch]);
+  }, [cartItems]);
 
   return (
     <div className="cart">

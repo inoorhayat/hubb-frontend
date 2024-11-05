@@ -5,13 +5,13 @@ import { BiArrowBack } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveShippingInfo } from "../redux/reducer/cartReducer";
-import { server } from "../redux/store";
-import { CartReducerInitialState } from "../types/reducer-types";
+import { RootState, server } from "../redux/store";
 
 const Shipping = () => {
-  const { cartItems, total } = useSelector(
-    (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
+  const { cartItems, coupon } = useSelector(
+    (state: RootState) => state.cartReducer
   );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Shipping = () => {
     city: "",
     state: "",
     country: "",
-    pinCode: 0,
+    pinCode: "",
   });
 
   const changeHandler = (
@@ -30,33 +30,38 @@ const Shipping = () => {
     setShippingInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>)=>{
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(saveShippingInfo(shippingInfo))
+    dispatch(saveShippingInfo(shippingInfo));
 
     try {
-      const {data} = await axios.post(`${server}/api/v1/payment/create`,{
-        amount:total,
-      },{
-        headers:{
-          "Content-Type": "application/json",
+      const { data } = await axios.post(
+        `${server}/api/v1/payment/create?id=${user?._id}`,
+        {
+          items: cartItems,
+          shippingInfo,
+          coupon,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      }
-    );
-      navigate("/pay",{
-        state:data.clientSecret,
-      })
+      );
+
+      navigate("/pay", {
+        state: data.clientSecret,
+      });
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     }
-
   };
 
   useEffect(() => {
     if (cartItems.length <= 0) return navigate("/cart");
-  }, [cartItems, navigate]);
+  }, [cartItems]);
 
   return (
     <div className="shipping">
@@ -64,8 +69,9 @@ const Shipping = () => {
         <BiArrowBack />
       </button>
 
-      <form onSubmit={submitHandler} >
+      <form onSubmit={submitHandler}>
         <h1>Shipping Address</h1>
+
         <input
           required
           type="text"
@@ -74,6 +80,7 @@ const Shipping = () => {
           value={shippingInfo.address}
           onChange={changeHandler}
         />
+
         <input
           required
           type="text"
@@ -82,6 +89,7 @@ const Shipping = () => {
           value={shippingInfo.city}
           onChange={changeHandler}
         />
+
         <input
           required
           type="text"
@@ -109,6 +117,7 @@ const Shipping = () => {
           value={shippingInfo.pinCode}
           onChange={changeHandler}
         />
+
         <button type="submit">Pay Now</button>
       </form>
     </div>

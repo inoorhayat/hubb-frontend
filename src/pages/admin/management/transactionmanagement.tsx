@@ -43,6 +43,7 @@ const TransactionManagement = () => {
   const {
     shippingInfo: { address, city, state, country, pinCode },
     orderItems,
+    user: { name },
     status,
     tax,
     subtotal,
@@ -106,9 +107,7 @@ const TransactionManagement = () => {
               </button>
               <h1>Order Info</h1>
               <h5>User Info</h5>
-              {/* <p>Name: {name}</p> */}
-              <p>Name: {user?.name || "No User Info"}</p>
-
+              <p>Name: {name}</p>
               <p>
                 Address:{" "}
                 {`${address}, ${city}, ${state}, ${country} ${pinCode}`}

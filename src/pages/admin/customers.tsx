@@ -75,14 +75,14 @@ const Customers = () => {
       setRows(
         data.users.map((i) => ({
           avatar: (
-          <img
-           style={{
-            borderRadius: "50%",
-          }}
-           src={i.photo} 
-           alt={i.name}
-          />
-        ),
+            <img
+              style={{
+                borderRadius: "50%",
+              }}
+              src={i.photo}
+              alt={i.name}
+            />
+          ),
           name: i.name,
           email: i.email,
           gender: i.gender,
@@ -94,7 +94,6 @@ const Customers = () => {
           ),
         }))
       );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const Table = TableHOC<DataType>(

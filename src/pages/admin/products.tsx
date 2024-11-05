@@ -8,7 +8,7 @@ import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
 import { Skeleton } from "../../components/loader";
 import { useAllProductsQuery } from "../../redux/api/productAPI";
-import { RootState, server } from "../../redux/store";
+import { RootState } from "../../redux/store";
 import { CustomError } from "../../types/api-types";
 
 interface DataType {
@@ -43,9 +43,8 @@ const columns: Column<DataType>[] = [
 ];
 
 const Products = () => {
-  const { user } = useSelector(
-    (state:RootState) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { isLoading, isError, error, data } = useAllProductsQuery(user?._id!);
 
@@ -60,7 +59,7 @@ const Products = () => {
     if (data)
       setRows(
         data.products.map((i) => ({
-          photo: <img src={`${server}/${i.photos}`} />,
+          photo: <img src={i.photos?.[0]?.url} />,
           name: i.name,
           price: i.price,
           stock: i.stock,
