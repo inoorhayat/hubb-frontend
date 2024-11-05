@@ -54,14 +54,7 @@ export const getLastMonths = () => {
   };
 };
 
-export const transformImage = (url: string | undefined, width = 200) => {
-  if (typeof url !== "string") {
-    console.error("Invalid URL:", url);
-    return ""; // Return a default value or handle appropriately
-  }
-
-  const newUrl = url.replace("uploads/", `uploads/dpr_auto/w_${width}/`);
+export const transformImage = (url: string, width = 200) => {
+  const newUrl = url.replace("upload/", `upload/dpr_auto/w_${width}/`);
   return newUrl;
 };
-
-console.log("URL before transform:", URL);
