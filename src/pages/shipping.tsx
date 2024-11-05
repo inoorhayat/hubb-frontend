@@ -1,12 +1,12 @@
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { saveShippingInfo } from "../redux/reducer/cartReducer";
 import { server } from "../redux/store";
 import { CartReducerInitialState } from "../types/reducer-types";
-import { saveShippingInfo } from "../redux/reducer/cartReducer";
 
 const Shipping = () => {
   const { cartItems, total } = useSelector(
@@ -21,7 +21,7 @@ const Shipping = () => {
     city: "",
     state: "",
     country: "",
-    pinCode: "",
+    pinCode: 0,
   });
 
   const changeHandler = (
@@ -56,7 +56,7 @@ const Shipping = () => {
 
   useEffect(() => {
     if (cartItems.length <= 0) return navigate("/cart");
-  }, [cartItems]);
+  }, [cartItems, navigate]);
 
   return (
     <div className="shipping">
